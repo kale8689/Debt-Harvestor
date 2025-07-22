@@ -1,5 +1,4 @@
 #include "plant.h"
-#include "harvest.h"
 #include "startMenu.h"
 #include <iostream>
 #include <fstream>
@@ -8,23 +7,18 @@
 #include <string>
 using namespace std;
 
-plant::plant(){
-    plantVector = vector<string>(10, "empty");
-}
-
 vector<string> plant::plantsTracker(int plotNumber, string seedType){
     // they pick plot 1, and rice. If no error cases show up. Then "plot1" = "rice"
     if (plotNumber >= 1 && plotNumber <= plantVector.size()) {
         plantVector[plotNumber - 1] = seedType;
     } 
+
     // to check if plantVector is working correctly 
-    //getPlotStatus();
     return plantVector;
 }
 
-
 vector<string>& plant::getPlotStatus(){
-    // reference this
+    
     cout << plantVector[0] << ", " << plantVector[1] << ", " << plantVector[2] << ", " << plantVector[3] << ", " 
     << plantVector[4]<< ", " << plantVector[5]<< ", " << plantVector[6]<< ", " << plantVector[7]
     << ", " << plantVector[8]<< ", " << plantVector[9] <<endl;
@@ -33,18 +27,17 @@ vector<string>& plant::getPlotStatus(){
 
 void plant::plantInteractInterface(){
     char choice;
+    startMenu menu;
 do {
     plantInterface();
     cout << "Plant again this turn? (y/n): ";
     cin >> choice;
 } while (choice == 'y');
-getPlotStatus();
 // goes back to mainMenu
-returnMainMenu(*menu);
+returnMainMenu(menu);
 }
 
 void plant::returnMainMenu(startMenu& main){
-    getPlotStatus();
     main.mainMenu();
 }
 
