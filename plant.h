@@ -5,11 +5,9 @@
 using namespace std;
 
 class startMenu;
-class harvest;
 
 class plant{
 public:
-plant();
 void plantInterface();
 // have the do while for the game
 void plantInteractInterface();
@@ -40,7 +38,5 @@ private:
     int bananaSeed = 0, grapeSeed = 0, pineappleSeed = 0, dragonSeed = 0;
     vector<string> plantVector = {"empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty",
     "empty", "empty"};
-    harvest* grown;   // persistent harvest object
-    startMenu* menu;   // persistent menu object
 };
 #endif
