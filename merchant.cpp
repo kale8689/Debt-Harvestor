@@ -15,7 +15,7 @@ playerInventory merchant:: displayMerchant(playerInventory inv){
     cout << "Here you can buy new seeds, and sell your plants!"<<endl;
     cout << "Be on the lookout, sometimes there will be special offers!"<<endl;
     cout << "Sometimes there'll be a bonus for selling or discounts for buying"<<endl;
-    cout << "\n\n";
+    cout << "\n";
     const string BLUE = "\033[34m";
     const string RED = "\033[31m";
     const string RESET = "\033[0m";
@@ -47,13 +47,13 @@ playerInventory merchant:: displayMerchant(playerInventory inv){
 
     int buyOrSell;
     if(merchOption == 1){
-        cout << "\n\n\n\n\n";
+        cout << "\n";
         cout<<"Would you like to buy or sell?"<<endl;
         cout <<"Press 1 to buy"<<endl;
         cout <<"Press 2 to sell"<<endl;
         cout <<"Press 3 to exit"<<endl;
         cin >> buyOrSell;
-        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        //cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
         if(buyOrSell == 1){
            inv = displayMenuSeeds(inv);
         }
@@ -88,7 +88,7 @@ playerInventory merchant:: displayMenuSeeds(playerInventory inv){
     srand(time(0));
     double total = 0;
     double cost =0;
-    int continueBuy;
+    char continueBuy;
 
 
     do {
@@ -113,15 +113,15 @@ playerInventory merchant:: displayMenuSeeds(playerInventory inv){
         for (const auto &seed : seedlisting) {
         cout << seed.listing << seed.price << endl;
     }
+
+    //Asks for index of the listing you want to buy
         cout << "Enter the index (0-4) of which seed you want to buy: ";
         int index;
         cin >> index;
-        cout<<"\n\n\n\n\n\n";
+        cout<<"\n";
 
         if (index >= 0 && index < static_cast<int>(seedlisting.size())) {
             Seeds selectedSeed = seedlisting[index];
-
-            
 
             cout << "Enter how many you want to buy: ";
             int quantity;
@@ -129,34 +129,39 @@ playerInventory merchant:: displayMenuSeeds(playerInventory inv){
     
 
             double cost = selectedSeed.price * quantity;
-
-    if (cost > inv.getSavings()) {
+        
+        //Error check if not enough money
+        if (cost > inv.getSavings()) {
         cout << "Insufficient funds! You need $" << cost << " but only have $" << inv.getSavings() << endl;
-}   else {
+        }   else {
         cout << "You've bought " << quantity << " " << selectedSeed.name << " seeds for $" << cost << endl;
 
-    total += cost;
+        total += cost;
 
-    inv.subtractfromSavings(cost);  // only subtract after checking
-    inv.addSeeds(selectedSeed.name, quantity);  // update inventory
+        //Access inventory functions
+        inv.subtractfromSavings(cost);  // only subtract after checking
+        inv.addSeeds(selectedSeed.name, quantity);  // update inventory
 
-    cout << "Purchase successful! Remaining savings: $" 
+         cout << "Purchase successful! Remaining savings: $" 
          << inv.getSavings() << endl;
-}
-
-
+         }
         }
         else {
         cout << "Invalid index! Please enter a number between 0 and 4." << endl;
         }
 
-        cout << "Buy another? (1 for yes, 0 for no): ";
+        cout << "Buy another? (y for yes, n for no): ";
         cin >> continueBuy;
-
-    } while (continueBuy == 1);
+        // Loop until valid input
+                while (continueBuy != 'y' && continueBuy != 'n') {
+                    cout << "Invalid input. Please enter 'y' or 'n': ";
+                    cin >> continueBuy;
+                }
+    } while (continueBuy == 'y');
 
     cout << "Total spent: $" << total << endl;
 
+    //Returns copied instance of inventory 
     return inv;
 
 }
@@ -168,17 +173,17 @@ playerInventory merchant:: displayMenuPlants(playerInventory inv){
     srand(time(0));
     double total = 0;
     double cost =0;
-    int continueBuy;
+    char continueBuy;
 
 
 
     do {
         vector<Plants> plantlisting{
-        {"Pineapple","The sell price of pineapple is: ",getRandomPrice(10,15)},
-        {"Grapes","The sell price of grapes is: ",getRandomPrice(7,9)},
-        {"Dragonfruit","The sell price of dragonfruit is: ",getRandomPrice(15,18)},
-        {"Rice","The sell price of rice is: ",getRandomPrice(5,7)},
-        {"Banana","The sell price of banana is: ",getRandomPrice(9,11)},
+        {"Pineapple","The sell price of pineapple is: ",getRandomPrice(1,3000)},
+        {"Grapes","The sell price of grapes is: ",getRandomPrice(1,3000)},
+        {"Dragonfruit","The sell price of dragonfruit is: ",getRandomPrice(1,3000)},
+        {"Rice","The sell price of rice is: ",getRandomPrice(1,3000)},
+        {"Banana","The sell price of banana is: ",getRandomPrice(1,300)},
         
     };
     
@@ -197,10 +202,12 @@ playerInventory merchant:: displayMenuPlants(playerInventory inv){
         cout << plant.plantlisting << plant.plantPrice<<endl;
     }
 
+
+    //Same as seed block but for plants
     cout << "Enter the index (0-4) of which plant you want to sell: ";
         int index;
         cin >> index;
-        cout<<"\n\n\n\n\n\n";
+        cout<<"\n";
 
         if (index >= 0 && index < static_cast<int>(plantlisting.size())) {
             Plants selectedPlants = plantlisting[index];
@@ -211,6 +218,7 @@ playerInventory merchant:: displayMenuPlants(playerInventory inv){
             int quantity;
             cin >> quantity;
     
+    //Uses getter function to confirm number of plants
             int currentOwned = inv.getPlant(selectedPlants.name);
 
             if (quantity <= 0) {
@@ -229,6 +237,7 @@ playerInventory merchant:: displayMenuPlants(playerInventory inv){
 
             total += selectedPlants.plantPrice * quantity;
 
+            //Uses inventory member functions to update values
             inv.addtoSavings(total); 
             inv.losePlants(selectedPlants.name, quantity);
             cout << "Sale successful! Remaining savings: $" << inv.getSavings() << endl;
@@ -239,13 +248,16 @@ playerInventory merchant:: displayMenuPlants(playerInventory inv){
         cout << "Invalid index! Please enter a number between 0 and 4." << endl;
         }
 
-        cout << "sell another? (1 for yes, 0 for no): ";
+        cout << "sell another? (y for yes, n for no): ";
         cin >> continueBuy;
-
-    } while (continueBuy == 1);
+        while (continueBuy != 'y' && continueBuy != 'n') {
+                            cout << "Invalid input. Please enter 'y' or 'n': ";
+                            cin >> continueBuy;
+                        }
+    } while (continueBuy == 'y');
 
     cout << "Total earned: $" << total << endl;
-
+    //Sends inventory values back
     return inv;
 
 
