@@ -1,5 +1,4 @@
 #include "plant.h"
-#include "harvest.h"
 #include "startMenu.h"
 #include <iostream>
 #include <fstream>
@@ -8,159 +7,26 @@
 #include <string>
 using namespace std;
 
-plant::plant(){
-    plantVector = vector<string>(10, "empty");
-}
-
 vector<string> plant::plantsTracker(int plotNumber, string seedType){
     // they pick plot 1, and rice. If no error cases show up. Then "plot1" = "rice"
     if (plotNumber >= 1 && plotNumber <= plantVector.size()) {
         plantVector[plotNumber - 1] = seedType;
     } 
+    
     // to check if plantVector is working correctly 
-    //getPlotStatus();
+    return plantVector;
+}
+
+vector<string> plant::getPlotStatus(){
+   // for (int i = 0; i < 9; i++){
+     //   cout << plantVector[i] << ", ";
+    //}
+    //cout << plantVector[9] << ", " << endl;    
     return plantVector;
 }
 
 
-vector<string>& plant::getPlotStatus(){
-    // reference this
-    cout << plantVector[0] << ", " << plantVector[1] << ", " << plantVector[2] << ", " << plantVector[3] << ", " 
-    << plantVector[4]<< ", " << plantVector[5]<< ", " << plantVector[6]<< ", " << plantVector[7]
-    << ", " << plantVector[8]<< ", " << plantVector[9] <<endl;
-    return plantVector;
-}
-
-void plant::plantInteractInterface(){
-    char choice;
-do {
-    plantInterface();
-    cout << "Plant again this turn? (y/n): ";
-    cin >> choice;
-} while (choice == 'y');
-getPlotStatus();
-// goes back to mainMenu
-returnMainMenu(*menu);
-}
-
-void plant::returnMainMenu(startMenu& main){
-    getPlotStatus();
-    main.mainMenu();
-}
-
-void plant::plantInterface() {
-    // telling user what is in their inventory
-    cout << "You have " << "\n"
-         << "Rice Seeds: " << riceSeed << "\n"
-         << "Banana Seeds: " << bananaSeed << "\n"
-         << "Grape Seeds: " << grapeSeed << "\n"
-         << "Pineapple Seeds: " << pineappleSeed << "\n"
-         << "Dragon Seeds: " << dragonSeed << "\n";
-
-    int plotNumber;
-    string seedType;
-
-    cout << "What plot do you want to plant?" << endl;
-    cin >> plotNumber;
-    if(plotNumber < 0 || plotNumber > 10){
-        cout << "Invalid plot number, pick from 1 -10." << endl;
-        return plantInterface();
-    }
-
-    cout << "What seeds do you want to plant?" << endl;
-    cin >> seedType;
-
-    if (seedType == "rice") {
-        if(riceSeed <= 0){
-            cout << "You do not have enough rice seeds." << endl;
-            return plantInterface();
-        }
-       else{ 
-            seedType += "Seed.txt";
-            // makes sure you cannot plot in a plot twice
-            if(plotPlantedTracker(plotNumber, seedType) == true){
-            // prints out plots
-            plantingSeeds(plotNumber, seedType);
-            riceSeed -= 1;
-            cout << "You have planted a rice seed in plot " << plotNumber << endl;
-            // puts what plants in an array
-            plantsTracker(plotNumber, seedType);
-            }
-        }
-    }
-    else if (seedType == "banana") {
-        if(bananaSeed <= 0){
-            cout << "You do not have enough banana seeds." << endl;
-            return;
-        }
-         else{ 
-            seedType += "Seed.txt";
-            if(plotPlantedTracker(plotNumber, seedType) == true){
-            plantingSeeds(plotNumber, seedType);
-            bananaSeed -= 1;
-            cout << "You have planted a banana seed in plot " << plotNumber << endl;
-            plantsTracker(plotNumber, seedType);
-            }
-        }
-    }
-    else if (seedType == "grape") {
-         if(grapeSeed <= 0){
-            cout << "You do not have enough grape seeds." << endl;
-            return;
-        }
-        else{ 
-            seedType += "Seed.txt";
-            if(plotPlantedTracker(plotNumber, seedType) == true){
-            plantingSeeds(plotNumber, seedType);
-            grapeSeed -= 1;
-            cout << "You have planted a grape seed in plot " << plotNumber << endl;
-            plantsTracker(plotNumber, seedType);
-            }
-        }
-    }
-    else if (seedType == "pineapple") {
-         if(pineappleSeed <= 0){
-            cout << "You do not have enough pineapple seeds." << endl;
-            return;
-        }
-        else{ 
-            seedType += "Seed.txt";
-            if(plotPlantedTracker(plotNumber, seedType) == true){
-            plantingSeeds(plotNumber, seedType);
-            bananaSeed -= 1;
-            cout << "You have planted a banana seed in plot " << plotNumber << endl;
-            plantsTracker(plotNumber, seedType);
-            }
-        }
-    }
-    else if (seedType == "dragon") {
-         if(dragonSeed <= 0){
-            cout << "You do not have enough dragon seeds." << endl;
-            return;
-        }
-    else{ 
-            seedType += "Seed.txt";
-            if(plotPlantedTracker(plotNumber, seedType) == true){
-            plantingSeeds(plotNumber, seedType);
-            dragonSeed -= 1;
-            cout << "You have planted a dragon seed in plot " << plotNumber << endl;
-            plantsTracker(plotNumber, seedType);
-            }
-        }
-    }
-    else {
-        cout << "Invalid seed type! Type 'rice' or 'dragon' or 'pineapple' or 'grape' or 'banana'" << endl;
-    }
-    if(riceSeed == 0 && pineappleSeed == 0 && dragonSeed == 0 && bananaSeed == 0 && grapeSeed == 0){
-        cout << "You have no seeds to plant. No more planting for you!" << endl;
-        return;
-    }
-}
-
-
-
-
-vector<string> plant::readFile(const string& fileName){
+vector<string> plant::readFile(const string fileName){
     ifstream file(fileName);
     vector<string> contents;
 
@@ -228,7 +94,7 @@ void plant::resetAllPlotsToEmpty() {
         vector<string> emptyContent = readFile(sourceFile);
 
         ofstream outFile(targetFile);
-        for (const string& line : emptyContent) {
+        for (const string line : emptyContent) {
             outFile << line << endl;
         }
         outFile.close();
@@ -294,7 +160,7 @@ void plant::plantingSeeds(int plotNumber, string seedType){
     }
 
     // write the seed data to the selected plot
-    for (const string& line : seedData) {
+    for (const string line : seedData) {
         outFile << line << endl;
     }
     outFile.close();
@@ -362,6 +228,16 @@ void plant::resetPlotPlantedTracker(){
         usedPlots[i] = 0;
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

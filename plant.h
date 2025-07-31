@@ -5,16 +5,11 @@
 using namespace std;
 
 class startMenu;
-class harvest;
 
 class plant{
 public:
-plant();
-void plantInterface();
-// have the do while for the game
-void plantInteractInterface();
 // readfile function
-vector<string> readFile(const string& fileName);
+vector<string> readFile(const string fileName);
 // show (void) initialized plots no plants function
 void resetAllPlotsToEmpty();
 // planting function
@@ -26,9 +21,7 @@ void resetPlotPlantedTracker();
 // vector tracker to know what plants are in what plot
 vector<string> plantsTracker(int plotNumber, string seedType);
 // return plantVector
-vector<string>& getPlotStatus();
-// returning main Menu
-void returnMainMenu(startMenu& main);
+vector<string> getPlotStatus();
 
 
 private: 
@@ -36,11 +29,7 @@ private:
     static int plotUsedCount;
     static int usedPlots[10];
     static const int maxPlotsPlant = 10;
-    int riceSeed = 5;
-    int bananaSeed = 0, grapeSeed = 0, pineappleSeed = 0, dragonSeed = 0;
     vector<string> plantVector = {"empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty",
     "empty", "empty"};
-    harvest* grown;   // persistent harvest object
-    startMenu* menu;   // persistent menu object
 };
 #endif
