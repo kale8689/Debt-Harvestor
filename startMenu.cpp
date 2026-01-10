@@ -5,12 +5,6 @@ using namespace std;
 #include "harvest.h"
 #include <string>
 
-startMenu::startMenu() {
-    garden = new plant();
-    grown = new harvest();
-    grown->setMenu(this);
-}
-
 void startMenu::displayMenu(){
         menuOptions();
         int option = 0;
@@ -97,6 +91,8 @@ void startMenu::mainMenu(){
     inGameMenuOption();
         int option = 0;
         cin >> option;
+        plant garden;
+        harvest grown;
         switch(option){
             case 1:
                 //openInventory();
@@ -105,15 +101,15 @@ void startMenu::mainMenu(){
                 //talkMerchant();
                 break;
             case 3:
-                plantingFeature(*garden);
+                plantingFeature(garden);
                 break;
             case 4:
                 // if turn 1, make it so this feature cannot be accessed
-                harvestingFeature(*grown, *garden);
+                harvestingFeature(grown, garden);
                 break;
             case 5:
                 //when ending your turn, the seeds will turn into crops, so I put the grow function here
-                seedsGrow(*grown, *garden);
+                seedsGrow(grown, garden);
                 break;
             case 6:
                 cout << "Quitting Game." << endl;

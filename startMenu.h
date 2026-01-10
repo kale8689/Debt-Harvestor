@@ -1,12 +1,10 @@
 #ifndef STARTMENU_H
 #define STARTMENU_H
-
-class plant;
-class harvest;
+#include "plant.h"
+#include "harvest.h"
 
 class startMenu{
 public:
-    startMenu();
     void displayMenu();
     void mainMenu();
     // returning plant function from plant class
@@ -21,9 +19,7 @@ private:
     void menuOptions();
     void startGame();
     void inGameMenuOption();
-    plant* garden;    // persistent plant object
-    harvest* grown;   // persistent harvest object
-
+    
 };
 
 #endif

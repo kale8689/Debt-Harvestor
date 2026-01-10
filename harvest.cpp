@@ -8,12 +8,9 @@
 #include <string>
 using namespace std;
 
-harvest::harvest() {
-
-}
-
 void harvest::harvestInterface(plant& garden){
     char choice;
+    startMenu menu;
     int plotNumber = 0;
     do{
         cout << "What plot do you want to harvest?" << endl;
@@ -22,7 +19,7 @@ void harvest::harvestInterface(plant& garden){
         harvestingPlants(plotNumber, garden);
     } while (choice == 'y');
     // goes back to mainMenu
-    returnMainMenu(*menu);
+    returnMainMenu(menu);
 }
 
 void harvest::returnMainMenu(startMenu& main){
@@ -32,7 +29,9 @@ void harvest::returnMainMenu(startMenu& main){
 // uses plant& garden as a way to remember data from plant class
 void harvest::harvestingPlants(int plotNumber, plant& garden) {
     vector<string>& plantVector = garden.getPlotStatus();
-
+    cout << plantVector[0] << ", " << plantVector[1] << ", " << plantVector[2] << ", " << plantVector[3] << ", " 
+    << plantVector[4]<< ", " << plantVector[5]<< ", " << plantVector[6]<< ", " << plantVector[7]
+    << ", " << plantVector[8]<< ", " << plantVector[9] <<endl;
 
     if (plantVector[plotNumber-1] == "empty"){
         cout << "There is nothing to harvest." << endl;
@@ -73,8 +72,8 @@ void harvest::seedToPlant(plant& garden){
     // for loop or read the plot 1 - 10 files using plantVector
     // if have seed files in them turn them into plant files
     // if do not have seed files leave them alone
-    garden.getPlotStatus();
-    vector<string>& plantVector = garden.getPlotStatus();
+    startMenu menu;
+    const vector<string>& plantVector = garden.getPlotStatus();
 
     int plotNumber = 0;
     for(int i = 0; i < plantVector.size(); i++){
@@ -101,9 +100,5 @@ void harvest::seedToPlant(plant& garden){
     }
     cout << "Everything has grown! Look at your beautiful garden ~" << endl;
     // goes back to mainMenu
-    returnMainMenu(*menu);
-}
-
-void harvest::setMenu(startMenu* m) {
-    menu = m;
+    returnMainMenu(menu);
 }
